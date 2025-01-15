@@ -7,6 +7,7 @@ class Hand(pygame.sprite.Sprite):
         self.current_frame_indx = 0
         self.image = self.images[self.current_frame_indx]
         self.rect = self.image.get_frect()
+        self.old_rect = self.rect.copy()
         self.offset = offset
         self.controls = controls
         
@@ -39,6 +40,7 @@ class Hand(pygame.sprite.Sprite):
             self.image = self.images[self.current_frame_indx]
         
     def update(self, dt):
+        self.old_rect = self.rect.copy()
         self.follow_player()
         self.animate(dt)
         

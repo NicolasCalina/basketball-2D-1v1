@@ -62,10 +62,12 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.running = False
             self.all_sprites.update(dt)
-            self.display_surface.blit(self.background, (0,0))
             self.hands_sprites.update(dt)
+            self.display_surface.blit(self.background, (0,0))
             pygame.sprite.Group.draw(self.all_sprites, self.display_surface)
             pygame.sprite.Group.draw(self.hands_sprites, self.display_surface)
+            pygame.draw.rect(self.display_surface, (255, 0, 0), self.player1.rect, 2)
+            pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
             pygame.display.update()
             
         pygame.quit()
