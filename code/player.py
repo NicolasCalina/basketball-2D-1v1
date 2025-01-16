@@ -8,8 +8,9 @@ class Player(pygame.sprite.Sprite):
         self.old_rect = self.rect.copy()
         
         self.direction = pygame.Vector2()
-        self.horizontal_speed = 400
-        self.vertical_speed = 0
+        # self.horizontal_speed = 400
+        # self.vertical_speed = 0
+        self.speed = pygame.Vector2(400, 0)
         self.gravity = 0.5
         self.is_on_floor = True
         self.controls = controls
@@ -17,18 +18,19 @@ class Player(pygame.sprite.Sprite):
 
         
     def move(self, dt):
-        self.rect.centerx += self.direction.x * self.horizontal_speed * dt
+        self.rect.centerx += self.direction.x * self.speed.x * dt
         
     def jump(self,dt, keys):
         if ( keys[self.controls["jump"]] and self.is_on_floor ):
-            self.vertical_speed = -15
+            self.speed.y = -10
             self.direction.y = 1
             self.is_on_floor = False
-        self.rect.centery += self.direction.y * self.vertical_speed * dt * 100
-        self.vertical_speed += self.gravity
+        self.rect.centery += self.direction.y * self.speed.y * dt * 100
+        self.speed.y += self.gravity
         
     def update(self,dt):
         self.old_rect = self.rect.copy()
+        
         keys = pygame.key.get_pressed()
         self.direction.x = int(keys[self.controls["right"]] - keys[self.controls["left"]])
         self.move(dt)

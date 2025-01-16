@@ -49,10 +49,10 @@ class Game():
             
         player1_offset = [ -5 , 50]    
         player2_offset = [ -10, 43]
-        self.player1_hand = Hand(self.hands_sprites, self.player1, player1_hand_images , player1_hand_controls, player1_offset, 1)
-        self.player2_hand = Hand(self.hands_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, 2)
+        #self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, 1)
+        #self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, 2)
         
-        self.basketball = Basketball((self.all_sprites, self.collision_sprites) , self.hands_sprites, self.player_sprites)
+        self.basketball = Basketball((self.all_sprites, self.collision_sprites) ,  self.player_sprites)
         
     def run(self):
         clock = pygame.time.Clock()
@@ -62,11 +62,11 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.running = False
             self.all_sprites.update(dt)
-            self.hands_sprites.update(dt)
             self.display_surface.blit(self.background, (0,0))
             pygame.sprite.Group.draw(self.all_sprites, self.display_surface)
             pygame.sprite.Group.draw(self.hands_sprites, self.display_surface)
             pygame.draw.rect(self.display_surface, (255, 0, 0), self.player1.rect, 2)
+            pygame.draw.rect(self.display_surface, "red", self.player2.rect, 2)
             pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
             pygame.display.update()
             

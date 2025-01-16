@@ -1,7 +1,7 @@
 from utils import *
 
 class Basketball(pygame.sprite.Sprite):
-    def __init__(self, groups, hands_group, players_group):
+    def __init__(self, groups, players_group):
         super().__init__(groups)
         self.image = pygame.transform.scale(
             pygame.image.load(join("../", "resources", "sprites", "basketball.png")).convert_alpha(),
@@ -10,20 +10,16 @@ class Basketball(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         self.old_rect = self.rect.copy()
         
-        self.vertical_speed = 0
-        self.horizontal_speed = 0
+        #motion variables
+        self.speed = pygame.Vector2( 0, 0)
         self.direction = pygame.Vector2(0, 1)
         self.gravity = 2
-        self.damping = 0.8
-        self.horizontal_damping = 1  # Amortizare pentru viteza orizontală
+        self.friction = 0.8
+        self.horizontal_friction = 1.1
+        
         self.floor = WINDOW_HEIGHT - 70
-        self.hands_group = hands_group
         self.players_group = players_group
 
-    def collision_with_hands(self):
-        if pygame.sprite.spritecollide(self, self.hands_group, False):
-            #self.vertical_speed = -200
-            pass
 
     def collision_with_players(self, direction):
         collided_player = pygame.sprite.spritecollide(self, self.players_group, False)
@@ -31,65 +27,70 @@ class Basketball(pygame.sprite.Sprite):
             player = collided_player[0]
 
             if direction == "horizontal":
-                if self.rect.right >= player.rect.left and self.old_rect.right >= player.rect.left:
-                    self.rect.right = player.rect.left
-                    self.direction.x = -1
-                    self.horizontal_speed += 20
-                    
+                if self.rect.right > player.rect.left and self.old_rect.right <= player.old_rect.left:
+                        self.rect.right = player.rect.left
+                        self.direction.x = -1
+                        self.speed.x += player.speed.x * 0.1
+                                
                 if self.rect.left <= player.rect.right and self.old_rect.left >= player.old_rect.right:
-                    self.rect.left = player.rect.right
-                    self.direction.x = 1
-                    self.horizontal_speed += 20
+                        self.rect.left = player.rect.right
+                        self.direction.x = 1
+                        self.speed.x += player.speed.x * 0.1     
 
             if direction == "vertical":
                 if self.rect.bottom >= player.rect.top and self.old_rect.bottom <= player.old_rect.top:
-                    self.rect.bottom = player.rect.top
-                    self.direction.y = -1
-                    self.vertical_speed += 20
-                if player.rect.bottom >= player.rect.top and self.old_rect.bottom <= player.rect.top:
-                    self.rect.top = player.rect.bottom
-                    self.direction.y = -1
-                    self.vertical_speed += 50
-                    print("vatafu")
-        
-    def falling_under_gravity(self):
+                        self.rect.bottom = player.rect.top
+                        self.direction.y = -1
+                        self.speed.y += player.speed.y * 0.3
+                if self.rect.top <= player.rect.bottom and self.old_rect.top >= player.old_rect.bottom:
+                        self.rect.top = player.rect.bottom
+                        player.speed.y = 0
+                        self.speed.y = 0
 
+                    
+    def screen_collision_vertical(self):
         if self.rect.bottom >= self.floor:
             self.rect.bottom = self.floor
             self.direction.y = - self.direction.y
-            self.vertical_speed *= self.damping
+            self.speed.y *= self.friction
+            
         if self.rect.top <= 0:
             self.rect.top = 0
             self.direction.y *= -1
-
-        if abs(self.vertical_speed) < 1:
-            self.vertical_speed = 0
-
-    def horizontal_movement(self):
+            
+    def screen_collision_horizontal(self):
         if self.rect.left <= 0:
             self.rect.left = 0
-            self.horizontal_speed *= -1
+            self.direction.x *= -1
             
         if self.rect.right >= WINDOW_WIDTH:
             self.rect.right = WINDOW_WIDTH
-            self.horizontal_speed *= -1
+            self.direction.x *= -1
         
-        self.horizontal_speed *= self.horizontal_damping
+    def vertical_movement(self,dt):
+        self.screen_collision_vertical()
+            
+        self.speed.y += self.gravity * self.direction.y
+        self.rect.centery += self.speed.y * self.direction.y * dt
 
-        if abs(self.horizontal_speed) < 1:
-            self.horizontal_speed = 0
+        if abs(self.speed.y) < 1:
+            self.speed.y = 0
+
+    def horizontal_movement(self,dt):
+        self.screen_collision_horizontal()
+        
+        self.speed.x -= self.horizontal_friction 
+        self.rect.centerx += self.speed.x * self.direction.x * dt
+
+        if abs(self.speed.x) < 1:
+            self.speed.x = 0
 
     def update(self, dt):
         self.old_rect = self.rect.copy()
-        self.vertical_speed += self.gravity * self.direction.y
-        self.rect.centery += self.vertical_speed * self.direction.y * dt
         
+        self.vertical_movement(dt)
         self.collision_with_players("vertical")
-        self.falling_under_gravity()
         
-        self.rect.centerx += self.horizontal_speed * self.direction.x * dt
+        self.horizontal_movement(dt)
         self.collision_with_players("horizontal")
-        self.horizontal_movement()
-
-        #collision checking
-        self.collision_with_hands()
+        
