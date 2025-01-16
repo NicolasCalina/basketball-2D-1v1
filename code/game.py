@@ -24,20 +24,20 @@ class Game():
         player1_hand_controls = { "down" : pygame.K_s }
         player2_hand_controls = { "down" : pygame.K_DOWN}
         
-        player1_position = ( 100, 675 )
-        player2_position = ( 1000, 675)
+        player1_position = ( 100, 725 )
+        player2_position = ( 1000, 725)
         
-        player1_padding = 70
-        player2_padding = 70
+        player1_padding = 20
+        player2_padding = 20
         
         player1_hand_images = [ 
                                pygame.transform.scale(pygame.image.load(join("../", "resources", "animations", "lebron", "lebron_arm[0].png")).convert_alpha(), (25 , 60) ), 
                                pygame.image.load(join("../", "resources", "animations", "lebron", "lebron_arm[1].png")).convert_alpha()
                                ]
-        
+        print(player1_hand_images[1])
         player2_hand_images = [ 
-                               pygame.transform.scale(pygame.image.load(join("../", "resources", "animations", "curry", "curry_arm[0].png")).convert_alpha(), (150, 60)), 
-                               pygame.transform.scale(pygame.image.load(join("../", "resources", "animations", "curry", "curry_arm[1].png")).convert_alpha(), (75, 60))
+                               pygame.transform.scale(pygame.image.load(join("../", "resources", "animations", "curry", "curry_arm[0].png")).convert_alpha(), (30, 60)), 
+                               pygame.transform.scale(pygame.image.load(join("../", "resources", "animations", "curry", "curry_arm[1].png")).convert_alpha(), (120, 26))
                                ]
         
         
@@ -48,11 +48,12 @@ class Game():
         self.player2 = Player( ( self.all_sprites, self.player_sprites ), player2_image, player2_controls, player2_position, player2_padding)
             
         player1_offset = [ -5 , 50]    
-        player2_offset = [ -10, 43]
-        #self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, 1)
-        #self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, 2)
+        player2_offset = [ 45, 43]
         
-        self.basketball = Basketball((self.all_sprites, self.collision_sprites) ,  self.player_sprites)
+        self.basketball = Basketball(self.all_sprites,  self.player_sprites)
+        
+        self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, self.basketball)
+        self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, self.basketball)
         
     def run(self):
         clock = pygame.time.Clock()
@@ -68,6 +69,8 @@ class Game():
             pygame.draw.rect(self.display_surface, (255, 0, 0), self.player1.rect, 2)
             pygame.draw.rect(self.display_surface, "red", self.player2.rect, 2)
             pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
+            pygame.draw.rect(self.display_surface, "red", self.player1_hand.rect, 2)
+            pygame.draw.rect(self.display_surface, "red", self.player2_hand.rect, 2)
             pygame.display.update()
             
         pygame.quit()
