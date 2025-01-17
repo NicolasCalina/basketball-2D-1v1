@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         
         self.direction = pygame.Vector2()
         self.speed = pygame.Vector2(400, 0)
-        self.gravity = 1200
+        self.gravity = 1400
         self.is_on_floor = True
         self.controls = controls
         self.padding = padding
@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         
     def jump(self, dt, keys):
         if keys[self.controls["jump"]] and self.is_on_floor:
-            self.speed.y = -600
+            self.speed.y = -1200
             self.direction.y = 1
             self.is_on_floor = False
         

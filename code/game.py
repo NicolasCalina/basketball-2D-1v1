@@ -16,6 +16,10 @@ class Game():
         self.hands_sprites = pygame.sprite.Group()
         self.player_sprites = pygame.sprite.Group()
         
+        self.players_score = [0 , 0]
+        self.font = pygame.font.Font(None, 50)
+        
+        
         self.background = pygame.transform.scale(pygame.image.load(join("../", "resources", "background", "basketball_court.jpg")).convert_alpha(), (WINDOW_WIDTH, WINDOW_HEIGHT))
         
         #players settings
@@ -63,8 +67,8 @@ class Game():
         self.hoop1_position = ( 80 ,100)
         self.hoop2_position = ( WINDOW_WIDTH - 225 ,100)
         
-        self.hoop1 = Hoop(self.all_sprites, self.hoop1_image, self.hoop1_position, self.basketball)
-        self.hoop2 = Hoop(self.all_sprites, self.hoop2_image, self.hoop2_position, self.basketball)
+        self.hoop1 = Hoop(self.all_sprites, self.hoop1_image, self.hoop1_position, self.basketball, self.players_score)
+        self.hoop2 = Hoop(self.all_sprites, self.hoop2_image, self.hoop2_position, self.basketball, self.players_score)
     def run(self):
         clock = pygame.time.Clock()
         while self.running:
@@ -76,13 +80,18 @@ class Game():
             self.display_surface.blit(self.background, (0,0))
             pygame.sprite.Group.draw(self.all_sprites, self.display_surface)
             pygame.sprite.Group.draw(self.hands_sprites, self.display_surface)
-            pygame.draw.rect(self.display_surface, (255, 0, 0), self.player1.rect, 2)
-            pygame.draw.rect(self.display_surface, "red", self.player2.rect, 2)
-            pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
-            pygame.draw.rect(self.display_surface, "red", self.player1_hand.rect, 2)
-            pygame.draw.rect(self.display_surface, "red", self.player2_hand.rect, 2)
-            pygame.draw.rect(self.display_surface, "red" , self.hoop1.rect,2)
-            pygame.draw.rect(self.display_surface, "red" , self.hoop2.rect,2)
+            # pygame.draw.rect(self.display_surface, (255, 0, 0), self.player1.rect, 2)
+            # pygame.draw.rect(self.display_surface, "red", self.player2.rect, 2)
+            # pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
+            # pygame.draw.rect(self.display_surface, "red", self.player1_hand.rect, 2)
+            # pygame.draw.rect(self.display_surface, "red", self.player2_hand.rect, 2)
+            # pygame.draw.rect(self.display_surface, "red" , self.hoop1.rect,2)
+            # pygame.draw.rect(self.display_surface, "red" , self.hoop2.rect,2)
+            # pygame.draw.line(self.display_surface, "green" , (120, 220), (230,220), 5)
+            # pygame.draw.line(self.display_surface, "green", ( 1060, 220), ( 1175, 220) , 5)
+            text = str(self.players_score[0]) + " - " + str(self.players_score[1])
+            text_surface = self.font.render(text, True , "black")
+            self.display_surface.blit(text_surface, ( 600, 150))
             pygame.display.update()
             
         pygame.quit()
