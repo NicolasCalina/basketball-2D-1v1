@@ -20,7 +20,7 @@ class Basketball(pygame.sprite.Sprite):
         self.friction = 0.8
         self.horizontal_friction = 0.8
         
-        self.floor = WINDOW_HEIGHT - 70
+        self.floor = WINDOW_HEIGHT - 90
         self.players_group = players_group
 
     def cap_speed(self):
@@ -37,16 +37,20 @@ class Basketball(pygame.sprite.Sprite):
                     self.rect.right = player.rect.left
                     self.direction.x = -1
                     self.speed.x += player.speed.x * 0.1
+                    self.speed.y += player.speed.y * 0.1
                             
                 if self.rect.left <= player.rect.right and self.old_rect.left >= player.old_rect.right:
                     self.rect.left = player.rect.right
                     self.direction.x = 1
-                    self.speed.x += player.speed.x * 0.1     
+                    self.speed.x += player.speed.x * 0.1
+                    self.speed.y += player.speed.y * 0.1     
 
             if direction == "vertical":
                 if self.rect.bottom >= player.rect.top and self.old_rect.bottom <= player.old_rect.top:
                     self.rect.bottom = player.rect.top
                     self.direction.y = -1
+                    self.speed.x = 300
+                    self.direction.x = player.direction.x
                     self.speed.y = 300
                 if self.rect.top <= player.rect.bottom and self.old_rect.top >= player.old_rect.bottom:
                     self.rect.top = player.rect.bottom

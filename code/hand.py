@@ -49,6 +49,7 @@ class Hand(pygame.sprite.Sprite):
         collided_hand = pygame.FRect.colliderect(self.rect, self.basketball.rect)
         if collided_hand:
             if self.basketball.rect.bottom >= self.rect.top and self.basketball.old_rect.bottom <= self.old_rect.top:
+                print("vatafu")
                 self.basketball.rect.bottom = self.rect.top
                 self.basketball.direction.y *= -1
                 self.basketball.speed.y += 20

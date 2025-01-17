@@ -2,6 +2,7 @@ from utils import *
 from basketball import Basketball
 from player import Player
 from hand import Hand
+from hoop import Hoop
 
 class Game():
     def __init__(self):
@@ -55,6 +56,15 @@ class Game():
         self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, self.basketball, 1)
         self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, self.basketball, 2)
         
+        
+        self.hoop1_image = pygame.transform.scale(pygame.image.load(join("../", "resources", "sprites", "left_hoop.png")).convert_alpha(), (150, 225))
+        self.hoop2_image = pygame.transform.scale(pygame.image.load(join("../", "resources", "sprites", "right_hoop.png")).convert_alpha(), (150, 225))
+        
+        self.hoop1_position = ( 80 ,100)
+        self.hoop2_position = ( WINDOW_WIDTH - 225 ,100)
+        
+        self.hoop1 = Hoop(self.all_sprites, self.hoop1_image, self.hoop1_position, self.basketball)
+        self.hoop2 = Hoop(self.all_sprites, self.hoop2_image, self.hoop2_position, self.basketball)
     def run(self):
         clock = pygame.time.Clock()
         while self.running:
@@ -71,6 +81,8 @@ class Game():
             pygame.draw.rect(self.display_surface, (255, 0, 0), self.basketball.rect, 2)
             pygame.draw.rect(self.display_surface, "red", self.player1_hand.rect, 2)
             pygame.draw.rect(self.display_surface, "red", self.player2_hand.rect, 2)
+            pygame.draw.rect(self.display_surface, "red" , self.hoop1.rect,2)
+            pygame.draw.rect(self.display_surface, "red" , self.hoop2.rect,2)
             pygame.display.update()
             
         pygame.quit()
