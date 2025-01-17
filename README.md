@@ -1,4 +1,4 @@
-# Basketball J-v-L
+# Basketball 2D 1v1
 
 This is a simple 1v1 2D basketball game inspired by *Head Ball Soccer*.  
 The objective of the game is to outscore your opponent by scoring more points.
