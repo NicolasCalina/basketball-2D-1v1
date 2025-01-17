@@ -52,8 +52,8 @@ class Game():
         
         self.basketball = Basketball(self.all_sprites,  self.player_sprites)
         
-        self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, self.basketball)
-        self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, self.basketball)
+        self.player1_hand = Hand(self.all_sprites , self.player1, player1_hand_images , player1_hand_controls, player1_offset, self.basketball, 1)
+        self.player2_hand = Hand(self.all_sprites, self.player2,player2_hand_images , player2_hand_controls, player2_offset, self.basketball, 2)
         
     def run(self):
         clock = pygame.time.Clock()
