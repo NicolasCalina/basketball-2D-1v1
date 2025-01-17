@@ -27,6 +27,12 @@ class Player(pygame.sprite.Sprite):
         # Apply gravity
         self.speed.y += self.gravity * dt
         self.rect.centery += self.direction.y * self.speed.y * dt
+    
+    def out_of_screen(self):
+        if self.rect.left <= 0:
+            self.rect.left = 0
+        if self.rect.right >= WINDOW_WIDTH:
+            self.rect.right = WINDOW_WIDTH
 
     def update(self, dt):
         self.old_rect = self.rect.copy()
@@ -35,6 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.direction.x = int(keys[self.controls["right"]] - keys[self.controls["left"]])
         self.move(dt)
         self.jump(dt, keys)
+        self.out_of_screen()
         
         # Check if player is on the floor
         if self.rect.bottom >= WINDOW_HEIGHT - self.padding:
